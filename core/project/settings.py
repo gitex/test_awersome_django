@@ -36,7 +36,6 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     'rest_framework',
     'easyaudit',
-    "django_tables2",
 ]
 
 LOCAL_APPS = [
@@ -84,6 +83,7 @@ WSGI_APPLICATION = "core.project.wsgi.application"
 DATABASES = {
     'default': config(
         'DATABASE_URL',
+        default='sqlite:///' + BASE_DIR.child('db.sqlite3'),
         cast=db_url,
     )
 }
