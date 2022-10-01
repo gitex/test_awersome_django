@@ -7,6 +7,8 @@ authors = ["Дороватовский Евгений <e.dorovatovskyi@benovate.
 [tool.poetry.dependencies]
 python = "^3.10"
 Django = "^4.1.1"
+djangorestframework = "^3.14.0"
+django-filter = "^22.1"
 
 [tool.poetry.dev-dependencies]
 

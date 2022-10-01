@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -39,11 +40,15 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 
+THIRD_PARTY_APPS = [
+    'rest_framework',
+]
+
 LOCAL_APPS = [
     'core.apps.users',
 ]
 
-INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -59,16 +64,17 @@ ROOT_URLCONF = "core.project.urls"
 
 TEMPLATES = [
     {
-        "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / 'core/templates']
-        ,
-        "APP_DIRS": True,
-        "OPTIONS": {
-            "context_processors": [
-                "django.template.context_processors.debug",
-                "django.template.context_processors.request",
-                "django.contrib.auth.context_processors.auth",
-                "django.contrib.messages.context_processors.messages",
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            BASE_DIR / 'core' / 'templates',
+        ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
             ],
         },
     },
@@ -116,11 +122,58 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = os.environ.get('STATIC_URL', '/static/')
+STATIC_ROOT = os.environ.get('STATIC_ROOT', BASE_DIR / 'storage' / 'static')
+
+MEDIA_URL = os.environ.get('MEDIA_URL', '/media/')
+MEDIA_ROOT = os.environ.get('MEDIA_ROOT', BASE_DIR / 'media')
 
 AUTH_USER_MODEL = 'users.User'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny'
+    ],
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json',
+}
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '({asctime}) [{module} : {levelname}]: {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '[{module}:{levelname}] {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'propagate': True,
+            'level': 'DEBUG',
+        },
+        'django.db': {
+            'handlers': ['console'],
+            'propagate': True,
+            'level': 'INFO',
+        },
+    },
+}
