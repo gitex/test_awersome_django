@@ -2,13 +2,15 @@
 name = "test_awersome_django"
 version = "0.1.0"
 description = ""
-authors = ["Дороватовский Евгений <e.dorovatovskyi@benovate.ru>"]
+authors = ["Дороватовский Евгений <eanegin@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
 Django = "^4.1.1"
 djangorestframework = "^3.14.0"
 django-filter = "^22.1"
+django-easy-audit = "^1.3.3"
+python-decouple = "^3.6"
 
 [tool.poetry.dev-dependencies]
 
